@@ -28,10 +28,12 @@ void SetCLIArguments(CLI::App &parser, AdcSettingsStruct &AdcSettings) {
                 "Provide a timestamp with every single ADC sample. Note: this "
                 "drastically increases the bandwidth requirements.")
       ->group("ADC Readout Options");
+
   auto IsPositiveInt = [&AdcSettings](std::vector<std::string> Input) -> bool {
     int InputVal;
     try {
       InputVal = std::stoi(Input[0]);
+      // TODO: Add check for maximum value and exception
       if (InputVal < 1) {
         return false;
       }

@@ -16,12 +16,14 @@
 #include <cstdint>
 #include <mutex>
 
+//TODO: AdcReadoutBase?
 class AdcReadoutCore : public Detector {
 public:
   AdcReadoutCore(BaseSettings Settings, AdcSettingsStruct &AdcSettings);
   AdcReadoutCore(const AdcReadoutCore &) = delete;
   AdcReadoutCore(const AdcReadoutCore &&) = delete;
   ~AdcReadoutCore() = default;
+  //TODO: delete copy assignment or finalize base?
 
 protected:
   virtual void inputThread();

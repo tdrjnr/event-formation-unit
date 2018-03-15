@@ -11,6 +11,7 @@
 #include "SampleProcessing.h"
 #include "libs/include/Socket.h"
 
+//TODO: magic number 100
 AdcReadoutCore::AdcReadoutCore(BaseSettings Settings,
                                AdcSettingsStruct &AdcSettings)
     : Detector("AdcReadout", Settings), toParsingQueue(100),

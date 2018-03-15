@@ -40,6 +40,8 @@ public:
   int getMeanOfSamples() const { return MeanOfNrOfSamples; };
   void setTimeStampLocation(TimeStampLocation Location);
   TimeStampLocation getTimeStampLocation() const { return TSLocation; };
+
+  // TODO: what does reset do?
   void reset();
 
 private:

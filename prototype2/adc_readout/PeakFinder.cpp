@@ -19,6 +19,7 @@ void PeakFinder::operator()(const PacketData &Data) {
   }
   for (auto &Module : Data.Modules) {
     auto Result = FindPeak(Module.Data);
+    // TODO: commented out for a reason?
     // std::uint64_t PeakTimeStamp =
     // TimeStamp::CalcSample(Module.TimeStampSeconds,
     // Module.TimeStampSecondsFrac, Result.MaxLocation);
@@ -53,12 +54,13 @@ ModuleAnalysisResult FindPeak(const std::vector<std::uint16_t> &SampleRun) {
   ModuleAnalysisResult ReturnData{
       0, 0, std::numeric_limits<std::uint16_t>::max(), 0, 0};
   std::int64_t Sum = 0;
-  for (std::uint32_t i = 0; i < SampleRun.size(); ++i) {
+  for (std::size_t i = 0; i < SampleRun.size(); ++i) {
     Sum += SampleRun[i];
     if (SampleRun[i] > ReturnData.Max) {
       ReturnData.Max = SampleRun[i];
       ReturnData.MaxLocation = i;
     }
+    // TODO: Not used - delete me?
     if (SampleRun[i] < ReturnData.Min) {
       ReturnData.Min = SampleRun[i];
       ReturnData.MinLocation = i;

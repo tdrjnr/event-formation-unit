@@ -22,11 +22,14 @@ std::uint64_t CalcSampleTimeStamp(const RawTimeStamp &Start,
   return StartNS + (EndNS - StartNS) / 2;
 }
 
+// TODO: magic number -> header?
 double CalcTimeStampDelta(int OversamplingFactor) {
   constexpr double SampleTime = 1.0 / (88052500 / 2);
   return SampleTime * OversamplingFactor;
 }
 
+// TODO: comment regarding 'left-over' data
+// TODO: could this be refactored?
 ProcessedSamples ChannelProcessing::operator()(const DataModule &Samples) {
   ProcessedSamples ReturnSamples;
   int FinalOversamplingFactor = MeanOfNrOfSamples * Samples.OversamplingFactor;
@@ -36,19 +39,24 @@ ProcessedSamples ChannelProcessing::operator()(const DataModule &Samples) {
       TimeStampOfFirstSample = Samples.TimeStamp.GetOffsetTimeStamp(
           i * Samples.OversamplingFactor - (Samples.OversamplingFactor - 1));
     }
+
     SumOfSamples += Samples.Data.at(i);
     NrOfSamplesSummed++;
+
     if (NrOfSamplesSummed == MeanOfNrOfSamples) {
       ReturnSamples.Samples.emplace_back(SumOfSamples /
                                          FinalOversamplingFactor);
       RawTimeStamp TimeStampOfLastSample =
           Samples.TimeStamp.GetOffsetTimeStamp(i * Samples.OversamplingFactor);
+
       ReturnSamples.TimeStamps.emplace_back(CalcSampleTimeStamp(
           TimeStampOfFirstSample, TimeStampOfLastSample, TSLocation));
+
       SumOfSamples = 0;
       NrOfSamplesSummed = 0;
     }
   }
+
   if (not ReturnSamples.TimeStamps.empty()) {
     ReturnSamples.TimeStamp = ReturnSamples.TimeStamps.at(0);
   }
@@ -93,6 +101,7 @@ void SampleProcessing::setTimeStampLocation(TimeStampLocation Location) {
   }
 }
 
+// TODO: better as a named method?
 void SampleProcessing::operator()(const PacketData &Data) {
   for (auto &Module : Data.Modules) {
     if (ProcessingInstances.find(Module.Channel) == ProcessingInstances.end()) {

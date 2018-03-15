@@ -33,7 +33,7 @@ struct BaseSettings {
   std::string   KafkaTopic           = {""};
   std::string   ConfigFile           = {""};
   std::uint64_t UpdateIntervalSec    = {1};
-  std::uint32_t StopAfterSec         = {0xffffffffU};
+  std::uint32_t StopAfterSec         = {0xffffffffU};  //TODO: comment? or defined constant for inf
 };
 // clang-format on
 
@@ -48,12 +48,16 @@ public:
   using CommandFunction =
       std::function<int(std::vector<std::string>, char *, unsigned int *)>;
   using ThreadList = std::vector<ThreadInfo>;
-  Detector(std::string Name, BaseSettings settings) : EFUSettings(settings), Stats(Name), DetectorName(Name) {};
+
+  Detector(std::string Name, BaseSettings settings) : EFUSettings(settings),
+  Stats(Name), DetectorName(Name) {};
+
+  // TODO: sort this comment out or delete!
   // default constructor, all instruments must implement these methods
   /** @brief generic pthread argument
    * @param arg user supplied pointer to pthread argument data
    */
-  
+
   virtual ~Detector() = default;
 
   /** @brief document */
@@ -69,6 +73,7 @@ public:
     Stats.setPrefix(NewStatsPrefix);
   }
 
+  // TODO: std:string
   virtual const char *detectorname() { return DetectorName.c_str(); }
 
   virtual ThreadList &GetThreadInfo() { return Threads; };
@@ -76,7 +81,7 @@ public:
   virtual std::map<std::string, CommandFunction> GetDetectorCommandFunctions() {
     return DetectorCommands;
   }
-  
+
   virtual void startThreads() {
     for (auto &tInfo : Threads) {
       tInfo.thread = std::thread(tInfo.func);
@@ -97,9 +102,11 @@ protected:
                          std::string funcName) {
     Threads.emplace_back(ThreadInfo{func, std::move(funcName), std::thread()});
   };
+
   void AddCommandFunction(std::string Name, CommandFunction FunctionObj) {
     DetectorCommands[Name] = FunctionObj;
   };
+
   ThreadList Threads;
   std::map<std::string, CommandFunction> DetectorCommands;
   std::atomic_bool runThreads{true};

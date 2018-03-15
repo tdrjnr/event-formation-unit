@@ -16,8 +16,10 @@ public:
 
 class TestDetectorFactory : public DetectorFactory {
 public:
+  // TODO: should have override keyword
   std::shared_ptr<Detector> create(BaseSettings settings) {
     std::cout << "TestDetectorFactory" << std::endl;
+    // TODO: use make_shared
     return std::shared_ptr<Detector>(new TestDetector(settings));
   }
 };
@@ -42,6 +44,7 @@ protected:
   void *dummyargs; // Used for calling thread functions
 };
 
+// TODO: better test names
 TEST_F(DetectorTest, Factory) { ASSERT_TRUE(det != nullptr); }
 
 TEST_F(DetectorTest, StatAPI) {

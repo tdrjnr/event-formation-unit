@@ -7,6 +7,7 @@
 
 #include "AdcReadoutCore.h"
 #include "AdcSettings.h"
+//3include detector.h
 
 static AdcSettingsStruct LocalAdcSettings;
 

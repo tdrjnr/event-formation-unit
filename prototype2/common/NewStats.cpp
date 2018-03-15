@@ -2,6 +2,7 @@
 
 #include <common/NewStats.h>
 
+// TODO: rename
 NewStats::NewStats() {}
 
 NewStats::~NewStats() {}
